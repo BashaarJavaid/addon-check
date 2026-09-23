@@ -6,11 +6,12 @@ export function object(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 export class UnsupportedSchema extends CheckError {}
-const drafts = ['https://json-schema.org/draft/2020-12/schema', 'http://json-schema.org/draft-07/schema#'];
+const drafts = ['https://json-schema.org/draft/2020-12/schema', 'http://json-schema.org/draft-07/schema'];
+const dialect = (value: unknown) => typeof value === 'string' ? value.replace(/#$/, '') : value;
 
 function inspect(schema: unknown): void {
   if (!object(schema)) return;
-  if (schema.$schema !== undefined && !drafts.includes(String(schema.$schema))) throw new UnsupportedSchema('Unsupported JSON Schema dialect; untested');
+  if (schema.$schema !== undefined && !drafts.includes(String(dialect(schema.$schema)))) throw new UnsupportedSchema('Unsupported JSON Schema dialect; untested');
   for (const key of ['$ref', '$dynamicRef', '$recursiveRef']) {
     if (typeof schema[key] === 'string' && !schema[key].startsWith('#')) throw new UnsupportedSchema('External schema references are not fetched; untested');
   }
@@ -30,7 +31,7 @@ export function compile(schema: unknown): ValidateFunction {
   inspect(schema);
   if (!object(schema) || schema.type !== 'object') throw new CheckError('MCP schema must declare an object root');
   const options = {strict: false, validateFormats: false, logger: false as const, allErrors: false};
-  const ajv = schema.$schema === drafts[1] ? new Ajv(options) : new Ajv2020(options);
+  const ajv = dialect(schema.$schema) === drafts[1] ? new Ajv(options) : new Ajv2020(options);
   try { return ajv.compile(schema); }
   catch { throw new CheckError('Invalid JSON Schema or unresolved local reference; schema details withheld'); }
 }

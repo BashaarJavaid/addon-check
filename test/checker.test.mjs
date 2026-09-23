@@ -137,7 +137,7 @@ test('missing descriptions/output schemas and style warn', async t => {
   for (const id of ['tools.description', 'tools.style', 'schema.output']) assert.ok(status(result, id, 'WARN'));
 });
 test('local references, draft-07, nullable unions, annotations', () => {
-  for (const $schema of [undefined, 'http://json-schema.org/draft-07/schema#']) {
+  for (const $schema of [undefined, 'http://json-schema.org/draft-07/schema#', 'http://json-schema.org/draft-07/schema', 'https://json-schema.org/draft/2020-12/schema#']) {
     const validator = compile({type: 'object', ...($schema ? {$schema} : {}), $defs: {entry: {anyOf: [{type: 'string', format: 'not-a-format'}, {type: 'null'}]}}, properties: {value: {$ref: '#/$defs/entry'}}, required: ['value']});
     assert.equal(validator({value: null}), true);
     assert.equal(validator({value: 'not-an-email'}), true);
