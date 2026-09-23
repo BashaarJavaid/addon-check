@@ -1,0 +1,20 @@
+{
+  "name": "addon-check",
+  "version": "0.1.0",
+  "description": "Independent black-box MCP add-on checks with explicit execution consent",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {"type": "git", "url": "git+https://github.com/BashaarJavaid/addon-check.git"},
+  "bin": {"addon-check": "dist/cli.js"},
+  "files": ["dist", "README.md", "LICENSE", "examples"],
+  "engines": {"node": "24.x"},
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {"@modelcontextprotocol/sdk": "1.30.1", "ajv": "8.20.0"},
+  "devDependencies": {"@eslint/js": "10.0.1", "@types/node": "24.13.5", "eslint": "10.10.0", "typescript": "6.0.3", "typescript-eslint": "8.70.0"}
+}

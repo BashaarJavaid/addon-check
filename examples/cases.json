@@ -1,0 +1,1 @@
+{"version":1,"cases":[{"tool":"read_context","arguments":{},"speechPointers":["/structuredContent/speech"],"repeatable":true,"expectError":false,"authProbe":true},{"tool":"write_once","arguments":{},"speechPointers":["/structuredContent/speech"],"repeatable":false,"expectError":false,"authProbe":false}]}
