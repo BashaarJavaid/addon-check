@@ -3,7 +3,7 @@
 Independent black-box MCP add-on checks. **Passing is not Amazon certification.**
 The CLI reports observed transport, authentication metadata, schema and explicitly
 authorized tool-call evidence. It knows nothing about household data or Hirz internals.
-Node 24 is required. Apache-2.0.
+Node 22 or later. Apache-2.0.
 
 ```sh
 npm install --global addon-check@0.1.0

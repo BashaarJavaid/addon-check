@@ -7,7 +7,7 @@
   "repository": {"type": "git", "url": "git+https://github.com/BashaarJavaid/addon-check.git"},
   "bin": {"addon-check": "dist/cli.js"},
   "files": ["dist", "README.md", "LICENSE", "examples"],
-  "engines": {"node": "24.x"},
+  "engines": {"node": ">=22"},
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
