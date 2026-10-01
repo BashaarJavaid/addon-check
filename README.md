@@ -151,3 +151,12 @@ then publish **the tested tarball** using `npm publish ./addon-check-0.1.0.tgz
 Never put a login credential or OTP in a report. Finally install
 `addon-check@0.1.0` in another clean directory and rerun fixture checks.
 Git source publication and a packed local install are distinct from npm publication.
+
+## Local MCP host harness
+
+This repository also contains the independent Apache-2.0 `addon-host` packages:
+[React frame, transcript and voice](./packages/react/README.md),
+[Python OAuth and MCP client](./packages/python/README.md), and a
+[local explicit tool runner](./examples/host/README.md). The checker CLI remains
+independently installable. Host evidence is separate from checker conformance;
+neither establishes Amazon certification.

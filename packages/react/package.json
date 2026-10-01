@@ -1,0 +1,42 @@
+{
+  "name": "addon-host",
+  "version": "0.1.0",
+  "description": "MCP Apps frame, transcript and browser voice controls for explicit local hosts",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BashaarJavaid/addon-check.git",
+    "directory": "packages/react"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "peerDependencies": {
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "2.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node -e \"require('node:fs').copyFileSync('src/style.css', 'dist/style.css')\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "npm run build"
+  }
+}
