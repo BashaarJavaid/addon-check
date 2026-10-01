@@ -1,0 +1,34 @@
+[project]
+name = "addon-host"
+version = "0.1.0"
+description = "In-memory OAuth and async MCP connections for explicit local hosts"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+dependencies = ["mcp==1.30.0", "httpx==0.28.1"]
+
+[project.urls]
+Repository = "https://github.com/BashaarJavaid/addon-check"
+
+[build-system]
+requires = ["uv_build==0.12.15"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = ["pytest==9.1.1", "pytest-cov==7.1.0", "ruff==0.16.8", "mypy==2.3.1"]
+example = ["fastapi==0.141.1", "uvicorn==0.53.0"]
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=addon_host --cov-report=term-missing --cov-fail-under=80"

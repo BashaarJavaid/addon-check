@@ -21,3 +21,41 @@ jobs:
       - run: npm pack --dry-run
       - run: npm pack
       - run: node test/package.mjs ./addon-check-0.1.0.tgz
+
+  host:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24.21.0"
+          package-manager-cache: false
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.12.15"
+          enable-cache: false
+      - run: npm ci
+      - run: npm run build:host
+      - run: uv sync --project packages/python --locked --group example
+      - run: uv run --project packages/python --locked --group example ruff check --config packages/python/pyproject.toml packages/python examples/host/server.py
+      - run: uv run --project packages/python --locked --group example ruff format --check --config packages/python/pyproject.toml packages/python examples/host/server.py
+      - run: uv run --project packages/python --locked --group example mypy --config-file packages/python/pyproject.toml packages/python/src examples/host/server.py
+      - run: uv run --locked --group example pytest
+        working-directory: packages/python
+      - run: npm exec --workspace addon-host-example -- playwright install --with-deps chromium
+      - run: npm test --workspace addon-host-example
+      - run: npm pack --workspace addon-host --pack-destination /tmp
+      - run: uv build --project packages/python --out-dir /tmp/host-dist
+      - name: Install packed artifacts in clean consumers
+        run: |
+          mkdir /tmp/host-consumer
+          cd /tmp/host-consumer
+          npm init -y
+          npm install /tmp/addon-host-0.1.0.tgz react@19.2.0 react-dom@19.2.0
+          node --input-type=module -e 'import { McpAppFrame, Transcript, useVoice } from "addon-host"; if (![McpAppFrame, Transcript, useVoice].every(x => typeof x === "function")) process.exit(1)'
+          uv venv --python 3.12 /tmp/host-venv
+          uv pip install --python /tmp/host-venv/bin/python /tmp/host-dist/addon_host-0.1.0-py3-none-any.whl
+          /tmp/host-venv/bin/python -c 'from addon_host import OAuthConfig, OAuthSession, connect_mcp'
